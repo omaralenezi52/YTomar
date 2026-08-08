@@ -1,0 +1,49 @@
+name: Build YTomar.dylib
+
+# يبني الـ dylib تلقائياً عند كل push أو يدوياً من زر Run workflow
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-14          # runner ماك فيه Xcode + iOS SDK
+    steps:
+      - name: Checkout المشروع
+        uses: actions/checkout@v4
+
+      - name: تثبيت Theos
+        run: |
+          export THEOS=${{ github.workspace }}/theos
+          git clone --recursive https://github.com/theos/theos.git "$THEOS"
+          echo "THEOS=$THEOS" >> "$GITHUB_ENV"
+
+      - name: تنزيل iOS SDKs
+        run: |
+          git clone --depth 1 https://github.com/theos/sdks.git "$THEOS/sdks"
+
+      - name: بناء الـ dylib + الحزمة
+        env:
+          THEOS: ${{ github.workspace }}/theos
+        run: |
+          make clean
+          make FINALPACKAGE=1
+          make package FINALPACKAGE=1
+          echo "=== الملفات الناتجة ==="
+          find .theos/obj -name '*.dylib' -print
+          ls -la packages/ || true
+
+      - name: رفع YTomar.dylib (الملف الخام)
+        uses: actions/upload-artifact@v4
+        with:
+          name: YTomar-dylib
+          path: .theos/obj/YTomar.dylib
+          if-no-files-found: error
+
+      - name: رفع حزمة .deb
+        uses: actions/upload-artifact@v4
+        with:
+          name: YTomar-deb
+          path: packages/*.deb
+          if-no-files-found: warn

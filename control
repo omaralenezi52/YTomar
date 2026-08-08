@@ -1,0 +1,9 @@
+Package: com.omarshouf.ytomar
+Name: YTOmar
+Version: 1.0.0
+Architecture: iphoneos-arm
+Description: واجهة يوتيوب موحّدة — تجمع مميزات uYouPlus في dylib واحد عصري (بدون Premium، PiP، 4K، سرعة، جودة افتراضية، منع قص المحتوى، SponsorBlock، رجوع الديسلايك).
+Maintainer: Omar Alenezi (Telegram: @o5252i)
+Author: Omar Alenezi (Telegram: @o5252i)
+Section: Tweaks
+Depends: mobilesubstrate (>= 0.9.5000), firmware (>= 14.0)
