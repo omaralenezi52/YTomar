@@ -60,6 +60,12 @@ jobs:
           git clone --recursive https://github.com/qnblackcat/uYouPlus.git upstream 2>&1 | tail -5
           echo "submodules:"; ls upstream
 
+      - name: تحديث المصادر لأحدث نسخة (إصلاحات توافق مع التولتشين الحديث)
+        run: |
+          cd upstream
+          git submodule update --init --recursive --remote 2>&1 | tail -25 || true
+          echo "=== تم تحديث الـsubmodules ==="
+
       - name: تطبيق وسم YTomar (@o5252i)
         run: |
           cp ytomar/branding/apply.sh upstream/apply.sh
