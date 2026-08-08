@@ -28,14 +28,24 @@ jobs:
       - name: أدوات البناء (ldid + dpkg + make)
         run: brew install ldid dpkg make
 
-      - name: جلب iOS SDK 16.5 (sparse)
+      - name: جلب iOS SDK يطابق runner ماك-14 (sparse)
         run: |
           set -e
+          CANDIDATES="iPhoneOS17.5.sdk iPhoneOS17.0.sdk iPhoneOS18.0.sdk iPhoneOS16.5.sdk"
           git clone --filter=blob:none --sparse https://github.com/theos/sdks.git sdks-repo
-          ( cd sdks-repo && git sparse-checkout set iPhoneOS16.5.sdk )
+          ( cd sdks-repo && git sparse-checkout set $CANDIDATES )
           mkdir -p theos/sdks
-          cp -r sdks-repo/iPhoneOS16.5.sdk theos/sdks/
+          PICK=""
+          for c in $CANDIDATES; do
+            if [ -d "sdks-repo/$c" ]; then
+              cp -r "sdks-repo/$c" theos/sdks/
+              [ -z "$PICK" ] && PICK="$c"
+            fi
+          done
           rm -rf sdks-repo
+          SDKVER=$(echo "$PICK" | sed 's/iPhoneOS//; s/.sdk//')
+          echo "اخترت SDK: $PICK (نسخة $SDKVER)"
+          echo "SDK_TARGET=iphone:clang:${SDKVER}:14.0" >> "$GITHUB_ENV"
           ls theos/sdks
 
       - name: استنساخ مصدر uYouPlus كامل
@@ -59,7 +69,9 @@ jobs:
           echo "THEOS=$THEOS ; SDKs:"; ls "$THEOS/sdks"
           make clean || true
           # نمرّر UYOU_URL لإصلاح شرط uYouPlus الفاضي + تنزيل uYou وتضمينه
+          echo "TARGET override = ${SDK_TARGET}"
           make package FINALPACKAGE=1 messages=yes \
+            TARGET="${SDK_TARGET}" \
             UYOU_URL="https://repo.miro92.com/debs/com.miro.uyou_3.0.4_iphoneos-arm.deb" \
             2>&1 | tee "$GITHUB_WORKSPACE/build.log"
           echo "=== packages ==="; ls -la packages/ || true
