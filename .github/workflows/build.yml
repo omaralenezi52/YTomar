@@ -28,6 +28,13 @@ jobs:
       - name: أدوات البناء (ldid + dpkg + make)
         run: brew install ldid dpkg make
 
+      - name: تركيب theos-jailed (يصلّح توليد logos WithInjection)
+        env:
+          THEOS: ${{ github.workspace }}/theos
+        run: |
+          git clone --recursive https://github.com/qnblackcat/theos-jailed.git theos-jailed
+          ./theos-jailed/install
+
       - name: SDK هجين (أساس Xcode + أطر theos الخاصة) باسم 16.5
         run: |
           exec > >(tee "$GITHUB_WORKSPACE/sdk.log") 2>&1
@@ -59,17 +66,6 @@ jobs:
         run: |
           git clone --recursive https://github.com/qnblackcat/uYouPlus.git upstream 2>&1 | tail -5
           echo "submodules:"; ls upstream
-
-      - name: تحديث المصادر لأحدث نسخة (إصلاحات توافق مع التولتشين الحديث)
-        run: |
-          cd upstream
-          git submodule update --init --recursive --remote 2>&1 | tail -25 || true
-          # تمريرة ثانية: تهيئة أي submodule متداخل أُضيف بالنسخ الأحدث (مثل YTUHD/vpx)
-          git submodule update --init --recursive 2>&1 | tail -25 || true
-          echo "=== فحص vpx ==="
-          find Tweaks -type d -iname 'vpx*' 2>/dev/null | head
-          find Tweaks -name 'vpx_decoder.h' 2>/dev/null | head
-          echo "=== تم تحديث الـsubmodules ==="
 
       - name: تطبيق وسم YTomar (@o5252i)
         run: |
