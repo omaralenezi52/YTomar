@@ -54,14 +54,14 @@ jobs:
           THEOS: ${{ github.workspace }}/theos
           THEOS_PACKAGE_SCHEME: rootless
         run: |
+          # نلتقط كل مخرجات الخطوة (حتى الأخطاء المبكرة) في build.log
+          exec > >(tee "$GITHUB_WORKSPACE/build.log") 2>&1
           set -o pipefail
           cd upstream
-          echo "THEOS=$THEOS ; SDKs:"; ls "$THEOS/sdks"
+          echo "THEOS=$THEOS"; echo "SDKs:"; ls "$THEOS/sdks" || echo "(no sdks dir!)"
           make clean || true
-          # نمرّر UYOU_URL لإصلاح شرط uYouPlus الفاضي + تنزيل uYou وتضمينه
           make package FINALPACKAGE=1 messages=yes \
-            UYOU_URL="https://repo.miro92.com/debs/com.miro.uyou_3.0.4_iphoneos-arm.deb" \
-            2>&1 | tee "$GITHUB_WORKSPACE/build.log"
+            UYOU_URL="https://repo.miro92.com/debs/com.miro.uyou_3.0.4_iphoneos-arm.deb"
           echo "=== packages ==="; ls -la packages/ || true
 
       - name: نشر اللوق في فرع ci-logs (حتى عند الفشل)
