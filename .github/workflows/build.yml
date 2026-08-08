@@ -28,22 +28,15 @@ jobs:
       - name: أدوات البناء (ldid + dpkg + make)
         run: brew install ldid dpkg make
 
-      - name: جلب SDK حديث وتسميته 16.5 (يطابق runner، يحل خطأ وحدات std)
+      - name: استخدام SDK الخاص بـXcode في الـrunner (مطابق للكلانغ) وتسميته 16.5
         run: |
           set -e
-          CANDIDATES="iPhoneOS17.5.sdk iPhoneOS17.4.sdk iPhoneOS17.0.sdk iPhoneOS18.1.sdk iPhoneOS18.0.sdk"
-          git clone --filter=blob:none --sparse https://github.com/theos/sdks.git sdks-repo
-          ( cd sdks-repo && git sparse-checkout set $CANDIDATES )
+          SDKREAL=$(cd "$(xcrun --sdk iphoneos --show-sdk-path)" && pwd -P)
+          echo "Xcode iOS SDK الفعلي: $SDKREAL"
           mkdir -p theos/sdks
-          PICK=""
-          for c in $CANDIDATES; do
-            [ -d "sdks-repo/$c" ] && { PICK="$c"; break; }
-          done
-          if [ -z "$PICK" ]; then echo "::error::لا يوجد SDK حديث مناسب"; exit 1; fi
-          echo "اخترت SDK حديث: $PICK — سأسمّيه iPhoneOS16.5.sdk (اللي يطلبه uYouPlus)"
-          cp -r "sdks-repo/$PICK" theos/sdks/iPhoneOS16.5.sdk
-          rm -rf sdks-repo
-          ls theos/sdks
+          cp -R "$SDKREAL" theos/sdks/iPhoneOS16.5.sdk
+          echo "نُسخ كـ iPhoneOS16.5.sdk"
+          ls -la theos/sdks
 
       - name: استنساخ مصدر uYouPlus كامل
         run: |
