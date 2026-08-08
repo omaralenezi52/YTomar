@@ -64,6 +64,11 @@ jobs:
         run: |
           cd upstream
           git submodule update --init --recursive --remote 2>&1 | tail -25 || true
+          # تمريرة ثانية: تهيئة أي submodule متداخل أُضيف بالنسخ الأحدث (مثل YTUHD/vpx)
+          git submodule update --init --recursive 2>&1 | tail -25 || true
+          echo "=== فحص vpx ==="
+          find Tweaks -type d -iname 'vpx*' 2>/dev/null | head
+          find Tweaks -name 'vpx_decoder.h' 2>/dev/null | head
           echo "=== تم تحديث الـsubmodules ==="
 
       - name: تطبيق وسم YTomar (@o5252i)
