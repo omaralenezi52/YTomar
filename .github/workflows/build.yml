@@ -77,7 +77,7 @@ jobs:
           cd upstream
           echo "THEOS=$THEOS"; echo "SDKs:"; ls "$THEOS/sdks" || echo "(no sdks dir!)"
           make clean || true
-          make package FINALPACKAGE=1 messages=yes \
+          make package FINALPACKAGE=1 messages=yes GO_EASY_ON_ME=1 \
             UYOU_URL="https://repo.miro92.com/debs/com.miro.uyou_3.0.4_iphoneos-arm.deb"
           echo "=== packages ==="; ls -la packages/ || true
 
