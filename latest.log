@@ -1,0 +1,92 @@
+===== SDK STEP =====
+Xcode iOS SDK: /Applications/Xcode_15.4.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk
+Cloning into 'sdks-repo'...
+عدد الأطر في المصدر:
+    1743
+✅ Preferences.tbd موجود بعد الأوفرلاي
+iPhoneOS16.5.sdk
+
+===== BUILD STEP (tail) =====
+THEOS=/Users/runner/work/YTomar/YTomar/theos
+SDKs:
+iPhoneOS16.5.sdk
+[0;36m==> [1;39mCleaning…[m
+[1;31m> [1;3;39mMaking clean in Tweaks/Alderis…[m
+[0;36m==> [1;39mCleaning…[m
+[1;31m> [1;3;39mMaking clean for xcodeproj Alderis…[m
+▸ Clean Succeeded
+[1;31m> [1;3;39mMaking clean in lcpshim…[m
+[0;36m==> [1;39mCleaning…[m
+[1;31m> [1;3;39mMaking clean in Tweaks/FLEXing/libflex…[m
+[0;36m==> [1;39mCleaning…[m
+[1;31m> [1;3;39mMaking clean in Tweaks/iSponsorBlock…[m
+[0;36m==> [1;39mCleaning…[m
+[1;31m> [1;3;39mMaking clean in Tweaks/YouGroupSettings…[m
+[0;36m==> [1;39mCleaning…[m
+[1;31m> [1;3;39mMaking clean in Tweaks/Return-YouTube-Dislikes…[m
+[0;36m==> [1;39mCleaning…[m
+[1;31m> [1;3;39mMaking clean in Tweaks/YouPiP…[m
+[0;36m==> [1;39mCleaning…[m
+[1;31m> [1;3;39mMaking clean in Tweaks/YTABConfig…[m
+[0;36m==> [1;39mCleaning…[m
+[1;31m> [1;3;39mMaking clean in Tweaks/YTUHD…[m
+[0;36m==> [1;39mCleaning…[m
+[1;31m> [1;3;39mMaking clean in Tweaks/DontEatMyContent…[m
+[0;36m==> [1;39mCleaning…[m
+[1;31m> [1;3;39mMaking clean in Tweaks/YTVideoOverlay…[m
+[0;36m==> [1;39mCleaning…[m
+[1;31m> [1;3;39mMaking clean in Tweaks/YouMute…[m
+[0;36m==> [1;39mCleaning…[m
+[1;31m> [1;3;39mMaking clean in Tweaks/YouQuality…[m
+[0;36m==> [1;39mCleaning…[m
+[1;31m> [1;3;39mMaking clean in Tweaks/YTClassicVideoQuality…[m
+[0;36m==> [1;39mCleaning…[m
+[1;31m> [1;3;39mMaking clean in Tweaks/NoYTPremium…[m
+[0;36m==> [1;39mCleaning…[m
+[1;31m> [1;3;39mMaking clean in Tweaks/YouTube-X…[m
+[0;36m==> [1;39mCleaning…[m
+[1;31m> [1;3;39mMaking clean in Tweaks/YouSpeed…[m
+[0;36m==> [1;39mCleaning…[m
+[0;36m==> [1;36mNotice:[m Build may be slow as Theos isn’t using all available CPU cores on this computer. Consider upgrading GNU Make: https://theos.dev/docs/parallel-building
+set -o pipefail; (rm -rf /Users/runner/work/YTomar/YTomar/upstream/.theos/swift)
+set -o pipefail; (mkdir -p /Users/runner/work/YTomar/YTomar/upstream/.theos/swift /Users/runner/work/YTomar/YTomar/upstream/.theos/swift/markers)
+[1;31m> [1;3;39mMaking all for tweak uYouPlus…[m
+/Applications/Xcode_15.4.app/Contents/Developer/usr/bin/make -f Makefile --no-keep-going COLOR=1 \
+		internal-library-compile \
+		_THEOS_CURRENT_TYPE=tweak THEOS_CURRENT_INSTANCE=uYouPlus _THEOS_CURRENT_OPERATION=compile \
+		THEOS_BUILD_DIR="." _THEOS_MAKE_PARALLEL=yes
+/Applications/Xcode_15.4.app/Contents/Developer/usr/bin/make -f Makefile --no-print-directory --no-keep-going internal-tweak-compile _THEOS_CURRENT_TYPE="tweak" THEOS_CURRENT_INSTANCE="uYouPlus" _THEOS_CURRENT_OPERATION="compile" THEOS_BUILD_DIR="." THEOS_CURRENT_ARCH="arm64"
+set -o pipefail; (mkdir -p /Users/runner/work/YTomar/YTomar/upstream/.theos/obj/arm64/Sources/)
+(printf "\e[0;3%im==> \e[1;39m%s…\e[m\n" 1 "Preprocessing Sources/BigYTMiniPlayer.xm"); set -o pipefail; (/Users/runner/work/YTomar/YTomar/theos/bin/logos.pl -c generator=MobileSubstrate    Sources/BigYTMiniPlayer.xm > /Users/runner/work/YTomar/YTomar/upstream/.theos/obj/arm64/Sources/BigYTMiniPlayer.xm.mm)
+[0;31m==> [1;39mPreprocessing Sources/BigYTMiniPlayer.xm…[m
+set -o pipefail; (mkdir -p /Users/runner/work/YTomar/YTomar/upstream/.theos/obj/arm64/Sources/)
+(printf "\e[0;3%im==> \e[1;39m%s…\e[m\n" 2 "Compiling Sources/BigYTMiniPlayer.xm (arm64)"); set -o pipefail; (/Applications/Xcode_15.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -x objective-c++ -c -I"/Users/runner/work/YTomar/YTomar/upstream/Sources" -I/Users/runner/work/YTomar/YTomar/theos/include/iphone -I/Users/runner/work/YTomar/YTomar/theos/include -I/Users/runner/work/YTomar/YTomar/theos/vendor/include -I/Users/runner/work/YTomar/YTomar/theos/include/_fallback -include /Users/runner/work/YTomar/YTomar/theos/Prefix.pch -iquote /Users/runner/work/YTomar/YTomar/upstream -MT /Users/runner/work/YTomar/YTomar/upstream/.theos/obj/arm64/Sources/BigYTMiniPlayer.xm.66b9c38a.o -MMD -MP -MF "/Users/runner/work/YTomar/YTomar/upstream/.theos/obj/arm64/Sources/BigYTMiniPlayer.xm.66b9c38a.Td" -fcolor-diagnostics -DTARGET_IPHONE=1 -Os -Wall -ggdb -Wno-unused-command-line-argument -Qunused-arguments -F/Users/runner/work/YTomar/YTomar/theos/sdks/iPhoneOS16.5.sdk//System/Library/PrivateFrameworks -F/Users/runner/work/YTomar/YTomar/theos/vendor/lib/iphone/rootless -F/Users/runner/work/YTomar/YTomar/theos/lib/iphone/rootless -D THEOS_PACKAGE_INSTALL_PREFIX="\"/var/jb\""  -isysroot "/Users/runner/work/YTomar/YTomar/theos/sdks/iPhoneOS16.5.sdk" -target arm64-apple-ios14.0  -resource-dir /Applications/Xcode_15.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../lib/swift/clang -I/Users/runner/work/YTomar/YTomar/upstream/Tweaks/RemoteLog -I/Users/runner/work/YTomar/YTomar/upstream/Tweaks -fobjc-arc -DTWEAK_VERSION=\"20.13.5-3.0.4\" -Wno-module-import-in-extern-c   -DTHEOS_INSTANCE_NAME="\"uYouPlus\"" -fmodules -fcxx-modules -fmodule-name=uYouPlus -fbuild-session-file=/Users/runner/work/YTomar/YTomar/upstream/.theos/build_session -fmodules-prune-after=345600 -fmodules-prune-interval=86400 -fmodules-validate-once-per-build-session  -arch arm64       -stdlib=libc++        /Users/runner/work/YTomar/YTomar/upstream/.theos/obj/arm64/Sources/BigYTMiniPlayer.xm.mm -o /Users/runner/work/YTomar/YTomar/upstream/.theos/obj/arm64/Sources/BigYTMiniPlayer.xm.66b9c38a.o)
+[0;32m==> [1;39mCompiling Sources/BigYTMiniPlayer.xm (arm64)…[m
+set -o pipefail; (rm /Users/runner/work/YTomar/YTomar/upstream/.theos/obj/arm64/Sources/BigYTMiniPlayer.xm.mm)
+set -o pipefail; (mkdir -p /Users/runner/work/YTomar/YTomar/upstream/.theos/obj/arm64/Sources/)
+(printf "\e[0;3%im==> \e[1;39m%s…\e[m\n" 1 "Preprocessing Sources/uYouPlus.xm"); set -o pipefail; (/Users/runner/work/YTomar/YTomar/theos/bin/logos.pl -c generator=MobileSubstrate    Sources/uYouPlus.xm > /Users/runner/work/YTomar/YTomar/upstream/.theos/obj/arm64/Sources/uYouPlus.xm.mm)
+[0;31m==> [1;39mPreprocessing Sources/uYouPlus.xm…[m
+set -o pipefail; (mkdir -p /Users/runner/work/YTomar/YTomar/upstream/.theos/obj/arm64/Sources/)
+(printf "\e[0;3%im==> \e[1;39m%s…\e[m\n" 2 "Compiling Sources/uYouPlus.xm (arm64)"); set -o pipefail; (/Applications/Xcode_15.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -x objective-c++ -c -I"/Users/runner/work/YTomar/YTomar/upstream/Sources" -I/Users/runner/work/YTomar/YTomar/theos/include/iphone -I/Users/runner/work/YTomar/YTomar/theos/include -I/Users/runner/work/YTomar/YTomar/theos/vendor/include -I/Users/runner/work/YTomar/YTomar/theos/include/_fallback -include /Users/runner/work/YTomar/YTomar/theos/Prefix.pch -iquote /Users/runner/work/YTomar/YTomar/upstream -MT /Users/runner/work/YTomar/YTomar/upstream/.theos/obj/arm64/Sources/uYouPlus.xm.66b9c38a.o -MMD -MP -MF "/Users/runner/work/YTomar/YTomar/upstream/.theos/obj/arm64/Sources/uYouPlus.xm.66b9c38a.Td" -fcolor-diagnostics -DTARGET_IPHONE=1 -Os -Wall -ggdb -Wno-unused-command-line-argument -Qunused-arguments -F/Users/runner/work/YTomar/YTomar/theos/sdks/iPhoneOS16.5.sdk//System/Library/PrivateFrameworks -F/Users/runner/work/YTomar/YTomar/theos/vendor/lib/iphone/rootless -F/Users/runner/work/YTomar/YTomar/theos/lib/iphone/rootless -D THEOS_PACKAGE_INSTALL_PREFIX="\"/var/jb\""  -isysroot "/Users/runner/work/YTomar/YTomar/theos/sdks/iPhoneOS16.5.sdk" -target arm64-apple-ios14.0  -resource-dir /Applications/Xcode_15.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../lib/swift/clang -I/Users/runner/work/YTomar/YTomar/upstream/Tweaks/RemoteLog -I/Users/runner/work/YTomar/YTomar/upstream/Tweaks -fobjc-arc -DTWEAK_VERSION=\"20.13.5-3.0.4\" -Wno-module-import-in-extern-c   -DTHEOS_INSTANCE_NAME="\"uYouPlus\"" -fmodules -fcxx-modules -fmodule-name=uYouPlus -fbuild-session-file=/Users/runner/work/YTomar/YTomar/upstream/.theos/build_session -fmodules-prune-after=345600 -fmodules-prune-interval=86400 -fmodules-validate-once-per-build-session  -arch arm64       -stdlib=libc++        /Users/runner/work/YTomar/YTomar/upstream/.theos/obj/arm64/Sources/uYouPlus.xm.mm -o /Users/runner/work/YTomar/YTomar/upstream/.theos/obj/arm64/Sources/uYouPlus.xm.66b9c38a.o)
+[0;32m==> [1;39mCompiling Sources/uYouPlus.xm (arm64)…[m
+[1mSources/uYouPlus.xm:165:229: [0m[0;1;31merror: [0m[1mfunction definition is not allowed here[0m
+static void _logos_method$_ungrouped$YTMainAppControlsOverlayView$setClosedCaptionsOrSubtitlesButtonAvailable$(_LOGOS_SELF_TYPE_NORMAL YTMainAppControlsOverlayView* _LOGOS_SELF_CONST __unused self, SEL __unused _cmd, BOOL arg1) {
+[0;1;32m                                                                                                                                                                                                                                    ^
+[0m[1mSources/uYouPlus.xm:172:215: [0m[0;1;31merror: [0m[1mfunction definition is not allowed here[0m
+static YTHUDMessageView* _logos_method$_ungrouped$YTHUDMessageView$initWithMessage$dismissHandler$(_LOGOS_SELF_TYPE_INIT YTHUDMessageView* __unused self, SEL __unused _cmd, id arg1, id arg2) _LOGOS_RETURN_RETAINED {
+[0;1;32m                                                                                                                                                                                                                      ^
+[0m[1mSources/uYouPlus.xm:182:200: [0m[0;1;31merror: [0m[1mfunction definition is not allowed here[0m
+static void _logos_method$_ungrouped$YTAnnotationsViewController$loadFeaturedChannelWatermark(_LOGOS_SELF_TYPE_NORMAL YTAnnotationsViewController* _LOGOS_SELF_CONST __unused self, SEL __unused _cmd) {
+[0;1;32m                                                                                                                                                                                                       ^
+[0m[1mSources/uYouPlus.xm:458:2: [0m[0;1;31merror: [0m[1mexpected '}'[0m
+}
+[0;1;32m ^
+[0m[1mSources/uYouPlus.xm:160:215: [0m[0;1;30mnote: [0mto match this '{'[0m
+static void _logos_method$_ungrouped$YTMainAppControlsOverlayView$setAutoplaySwitchButtonRenderer$(_LOGOS_SELF_TYPE_NORMAL YTMainAppControlsOverlayView* _LOGOS_SELF_CONST __unused self, SEL __unused _cmd, id arg1) { 
+[0;1;32m                                                                                                                                                                                                                      ^
+[0m4 errors generated.
+make[3]: *** [/Users/runner/work/YTomar/YTomar/upstream/.theos/obj/arm64/Sources/uYouPlus.xm.66b9c38a.o] Error 1
+rm /Users/runner/work/YTomar/YTomar/upstream/.theos/obj/arm64/Sources/uYouPlus.xm.mm
+make[2]: *** [/Users/runner/work/YTomar/YTomar/upstream/.theos/obj/arm64/uYouPlus.dylib] Error 2
+make[1]: *** [internal-library-all_] Error 2
+make: *** [uYouPlus.all.tweak.variables] Error 2
