@@ -28,13 +28,6 @@ jobs:
       - name: أدوات البناء (ldid + dpkg + make)
         run: brew install ldid dpkg make
 
-      - name: تركيب theos-jailed (يصلّح توليد logos WithInjection)
-        env:
-          THEOS: ${{ github.workspace }}/theos
-        run: |
-          git clone --recursive https://github.com/qnblackcat/theos-jailed.git theos-jailed
-          ./theos-jailed/install
-
       - name: SDK هجين (أساس Xcode + أطر theos الخاصة) باسم 16.5
         run: |
           exec > >(tee "$GITHUB_WORKSPACE/sdk.log") 2>&1
@@ -84,8 +77,8 @@ jobs:
           cd upstream
           echo "THEOS=$THEOS"; echo "SDKs:"; ls "$THEOS/sdks" || echo "(no sdks dir!)"
           make clean || true
-          make package FINALPACKAGE=1 messages=yes GO_EASY_ON_ME=1 \
-            UYOU_URL="https://repo.miro92.com/debs/com.miro.uyou_3.0.4_iphoneos-arm.deb"
+          # JAILBROKEN=1 يتخطّى وحدة jailed (WithInjection) → hooks عادية، %orig سليم
+          make package JAILBROKEN=1 FINALPACKAGE=1 messages=yes GO_EASY_ON_ME=1
           echo "=== packages ==="; ls -la packages/ || true
 
       - name: نشر اللوق في فرع ci-logs (حتى عند الفشل)
