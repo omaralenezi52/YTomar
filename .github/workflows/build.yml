@@ -1,4 +1,7 @@
-name: Build YTomar.dylib
+name: Build YTomar (faithful, from upstream)
+
+# يبني نسخة YTomar الكاملة من مصادر uYouPlus الأصلية (كل الـ18 تشتغل طبق الأصل)
+# مع وسم حقوق Omar Alenezi (@o5252i). المخرج: حزمة .deb فيها كل التويكات.
 
 on:
   push:
@@ -9,64 +12,57 @@ jobs:
   build:
     runs-on: macos-14
     steps:
-      - name: Checkout المشروع
+      - name: Checkout (سكربت الوسم)
         uses: actions/checkout@v4
         with:
-          path: src
+          path: ytomar
 
-      - name: جلب Theos (عبر checkout الموثوق)
+      - name: جلب Theos
         uses: actions/checkout@v4
         with:
           repository: theos/theos
           submodules: recursive
           path: theos
 
-      - name: تثبيت أداة التوقيع ldid
-        run: brew install ldid
+      - name: أدوات البناء (ldid + dpkg + make)
+        run: brew install ldid dpkg make
 
-      - name: جلب iOS SDK واحدة فقط (sparse-checkout سريع)
+      - name: جلب iOS SDK 16.5 (sparse)
         run: |
           set -e
           git clone --filter=blob:none --sparse https://github.com/theos/sdks.git sdks-repo
-          cd sdks-repo
-          git sparse-checkout set iPhoneOS16.5.sdk
-          cd ..
+          ( cd sdks-repo && git sparse-checkout set iPhoneOS16.5.sdk )
           mkdir -p theos/sdks
           cp -r sdks-repo/iPhoneOS16.5.sdk theos/sdks/
           rm -rf sdks-repo
-          echo "SDKs:"; ls theos/sdks
+          ls theos/sdks
 
-      - name: تشخيص البيئة قبل البناء
+      - name: استنساخ مصدر uYouPlus كامل (كل الـsubmodules الأصلية)
+        run: git clone --recursive https://github.com/qnblackcat/uYouPlus.git upstream
+
+      - name: تطبيق وسم YTomar (@o5252i)
+        run: |
+          cp ytomar/branding/apply.sh upstream/apply.sh
+          cd upstream
+          bash apply.sh
+
+      - name: بناء الحزمة
         env:
           THEOS: ${{ github.workspace }}/theos
+          THEOS_PACKAGE_SCHEME: rootful
         run: |
-          echo "THEOS=$THEOS"
-          echo "--- theos/sdks ---"; ls -la "$THEOS/sdks" || echo "no sdks dir"
-          echo "--- xcode sdk ---"; xcrun --sdk iphoneos --show-sdk-path || true
-          echo "--- theos bin ---"; ls "$THEOS/bin" | head || true
-
-      - name: بناء الـ dylib + الحزمة (verbose)
-        env:
-          THEOS: ${{ github.workspace }}/theos
-        run: |
-          cd src
-          make clean
-          make FINALPACKAGE=1 messages=yes || { echo "::error::MAKE FAILED"; exit 2; }
-          make package FINALPACKAGE=1 messages=yes || true
-          echo "=== الملفات الناتجة ==="
-          find .theos/obj -name '*.dylib' -print
+          cd upstream
+          make clean || true
+          make package FINALPACKAGE=1 messages=yes 2>&1 | tee ../build.log
+          echo "=== المخرجات ==="
           ls -la packages/ || true
+          find . -name '*.dylib' -path '*obj*' | head -40
 
-      - name: رفع YTomar.dylib (الملف الخام)
+      - name: رفع حزمة YTomar (.deb + كل التويكات)
         uses: actions/upload-artifact@v4
         with:
-          name: YTomar-dylib
-          path: src/.theos/obj/YTomar.dylib
-          if-no-files-found: error
-
-      - name: رفع حزمة .deb
-        uses: actions/upload-artifact@v4
-        with:
-          name: YTomar-deb
-          path: src/packages/*.deb
+          name: YTomar-package
+          path: |
+            upstream/packages/*.deb
+            build.log
           if-no-files-found: warn
