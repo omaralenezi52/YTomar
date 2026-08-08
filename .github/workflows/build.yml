@@ -30,19 +30,28 @@ jobs:
 
       - name: SDK هجين (أساس Xcode + أطر theos الخاصة) باسم 16.5
         run: |
+          exec > >(tee "$GITHUB_WORKSPACE/sdk.log") 2>&1
           set -e
-          # 1) أساس: SDK الخاص بـXcode (متوافق مع الكلانغ، يحل خطأ الوحدات)
+          # 1) أساس: SDK الخاص بـXcode (متوافق مع الكلانغ)
           SDKREAL=$(cd "$(xcrun --sdk iphoneos --show-sdk-path)" && pwd -P)
           echo "Xcode iOS SDK: $SDKREAL"
           mkdir -p theos/sdks
           cp -R "$SDKREAL" theos/sdks/iPhoneOS16.5.sdk
-          # 2) نركّب الأطر الخاصة (Preferences وغيرها) من theos/sdks 16.5
+          # 2) نجلب أطر theos الخاصة (cone مضيّق على PrivateFrameworks فقط)
           git clone --filter=blob:none --sparse https://github.com/theos/sdks.git sdks-repo
-          ( cd sdks-repo && git sparse-checkout set iPhoneOS16.5.sdk )
+          ( cd sdks-repo && git sparse-checkout set iPhoneOS16.5.sdk/System/Library/PrivateFrameworks )
+          SRC="sdks-repo/iPhoneOS16.5.sdk/System/Library/PrivateFrameworks"
           DST="theos/sdks/iPhoneOS16.5.sdk/System/Library/PrivateFrameworks"
+          echo "عدد الأطر في المصدر:"; ls "$SRC" | wc -l
           mkdir -p "$DST"
-          cp -R sdks-repo/iPhoneOS16.5.sdk/System/Library/PrivateFrameworks/. "$DST"/ 2>/dev/null || true
-          echo "Preferences موجود؟"; ls "$DST" | grep -i Preferences || echo "لا!"
+          cp -R "$SRC"/. "$DST"/
+          # تحقق صارم من Preferences
+          if [ -e "$DST/Preferences.framework/Preferences.tbd" ]; then
+            echo "✅ Preferences.tbd موجود بعد الأوفرلاي"
+          else
+            echo "❌ Preferences.tbd مفقود! محتوى المصدر:"; ls "$SRC" | grep -i pref || true
+            exit 1
+          fi
           rm -rf sdks-repo
           ls theos/sdks
 
@@ -79,7 +88,8 @@ jobs:
           git config user.name "ci"; git config user.email "ci@local"
           git checkout --orphan ci-logs 2>/dev/null || git checkout ci-logs
           git rm -rf --cached . >/dev/null 2>&1 || true
-          tail -c 60000 "$GITHUB_WORKSPACE/build.log" > latest.log 2>/dev/null || echo "no build.log produced" > latest.log
+          { echo "===== SDK STEP ====="; cat "$GITHUB_WORKSPACE/sdk.log" 2>/dev/null || echo "(no sdk.log)"; \
+            echo; echo "===== BUILD STEP (tail) ====="; tail -c 55000 "$GITHUB_WORKSPACE/build.log" 2>/dev/null || echo "(no build.log)"; } > latest.log
           git add -f latest.log
           git commit -m "CI build log" >/dev/null 2>&1 || true
           git push -f origin ci-logs
