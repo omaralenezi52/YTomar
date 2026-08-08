@@ -36,4 +36,13 @@ for f in $LOC; do
   sed -i '' -e 's/uYouPlus/YTomar (@o5252i)/g' "$f" || true
 done
 
+# ---- 4) ترقيع توافق: %orig كوسيط دالة يكسر logos ----
+# YouPiP/LegacyPiPCompat.x: نخزّن %orig في متغيّر بدل تمريره مباشرة
+PIPF="Tweaks/YouPiP/LegacyPiPCompat.x"
+if [ -f "$PIPF" ]; then
+  perl -0pi -e 's/return initPlayerPiPControllerIfNeeded\(%orig, delegate, nil\);/id _yo = %orig; return initPlayerPiPControllerIfNeeded(_yo, delegate, nil);/g' "$PIPF"
+  perl -0pi -e 's/return initPlayerPiPControllerIfNeeded\(%orig, delegate, parentResponder\);/id _yo = %orig; return initPlayerPiPControllerIfNeeded(_yo, delegate, parentResponder);/g' "$PIPF"
+  echo "  ✎ رقّعت LegacyPiPCompat.x (%orig → متغيّر)"
+fi
+
 echo "==> اكتمل الوسم ✅"
