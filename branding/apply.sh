@@ -45,11 +45,14 @@ if [ -f "$PIPF" ]; then
   echo "  ✎ رقّعت LegacyPiPCompat.x (%orig → متغيّر)"
 fi
 
-# uYouPlus.xm: %orig(NO) داخل ternary يرفضه logos الحديث
+# uYouPlus.xm: %orig(وسيط صريح) يرفضه logos الحديث → نعدّل arg1 ثم %orig عادي
 UYXM="Sources/uYouPlus.xm"
 if [ -f "$UYXM" ]; then
-  perl -0pi -e 's/return IS_ENABLED\(kHideCC\) \? %orig\(NO\) : %orig;/if (IS_ENABLED(kHideCC)) %orig(NO); else %orig;/g' "$UYXM"
-  echo "  ✎ رقّعت uYouPlus.xm (%orig(NO) خارج ternary)"
+  perl -0pi -e 's/return IS_ENABLED\(kHideCC\) \? %orig\(NO\) : %orig;/arg1 = IS_ENABLED(kHideCC) ? NO : arg1; %orig;/g' "$UYXM"
+  perl -0pi -e 's/\Q%orig(YES);\E/arg1 = YES; %orig;/g' "$UYXM"
+  perl -0pi -e 's/\{ %orig\(0\); \}/{ arg1 = 0; %orig; }/g' "$UYXM"
+  echo "  ✎ رقّعت uYouPlus.xm (4 حالات %orig بوسيط صريح)"
+  echo "  تحقق: باقي %orig( بوسيط؟"; grep -nE '%orig\([^)]' "$UYXM" || echo "  لا شيء ✅"
 fi
 
 echo "==> اكتمل الوسم ✅"
