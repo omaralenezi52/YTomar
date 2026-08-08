@@ -21,6 +21,9 @@ jobs:
           submodules: recursive
           path: theos
 
+      - name: تثبيت أداة التوقيع ldid
+        run: brew install ldid
+
       - name: جلب iOS SDK واحدة فقط (sparse-checkout سريع)
         run: |
           set -e
@@ -33,15 +36,23 @@ jobs:
           rm -rf sdks-repo
           echo "SDKs:"; ls theos/sdks
 
-      - name: بناء الـ dylib + الحزمة
+      - name: تشخيص البيئة قبل البناء
         env:
           THEOS: ${{ github.workspace }}/theos
         run: |
-          set -e
+          echo "THEOS=$THEOS"
+          echo "--- theos/sdks ---"; ls -la "$THEOS/sdks" || echo "no sdks dir"
+          echo "--- xcode sdk ---"; xcrun --sdk iphoneos --show-sdk-path || true
+          echo "--- theos bin ---"; ls "$THEOS/bin" | head || true
+
+      - name: بناء الـ dylib + الحزمة (verbose)
+        env:
+          THEOS: ${{ github.workspace }}/theos
+        run: |
           cd src
           make clean
-          make FINALPACKAGE=1
-          make package FINALPACKAGE=1
+          make FINALPACKAGE=1 messages=yes || { echo "::error::MAKE FAILED"; exit 2; }
+          make package FINALPACKAGE=1 messages=yes || true
           echo "=== الملفات الناتجة ==="
           find .theos/obj -name '*.dylib' -print
           ls -la packages/ || true
