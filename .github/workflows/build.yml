@@ -58,8 +58,10 @@ jobs:
           cd upstream
           echo "THEOS=$THEOS ; SDKs:"; ls "$THEOS/sdks"
           make clean || true
-          # نبني الحزمة؛ pipefail يضمن أن فشل make يفشل الخطوة فعلاً
-          make package FINALPACKAGE=1 messages=yes 2>&1 | tee "$GITHUB_WORKSPACE/build.log"
+          # نمرّر UYOU_URL لإصلاح شرط uYouPlus الفاضي + تنزيل uYou وتضمينه
+          make package FINALPACKAGE=1 messages=yes \
+            UYOU_URL="https://repo.miro92.com/debs/com.miro.uyou_3.0.4_iphoneos-arm.deb" \
+            2>&1 | tee "$GITHUB_WORKSPACE/build.log"
           echo "=== packages ==="; ls -la packages/ || true
 
       - name: نشر اللوق في فرع ci-logs (حتى عند الفشل)
