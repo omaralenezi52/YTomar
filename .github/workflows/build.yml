@@ -28,15 +28,23 @@ jobs:
       - name: أدوات البناء (ldid + dpkg + make)
         run: brew install ldid dpkg make
 
-      - name: استخدام SDK الخاص بـXcode في الـrunner (مطابق للكلانغ) وتسميته 16.5
+      - name: SDK هجين (أساس Xcode + أطر theos الخاصة) باسم 16.5
         run: |
           set -e
+          # 1) أساس: SDK الخاص بـXcode (متوافق مع الكلانغ، يحل خطأ الوحدات)
           SDKREAL=$(cd "$(xcrun --sdk iphoneos --show-sdk-path)" && pwd -P)
-          echo "Xcode iOS SDK الفعلي: $SDKREAL"
+          echo "Xcode iOS SDK: $SDKREAL"
           mkdir -p theos/sdks
           cp -R "$SDKREAL" theos/sdks/iPhoneOS16.5.sdk
-          echo "نُسخ كـ iPhoneOS16.5.sdk"
-          ls -la theos/sdks
+          # 2) نركّب الأطر الخاصة (Preferences وغيرها) من theos/sdks 16.5
+          git clone --filter=blob:none --sparse https://github.com/theos/sdks.git sdks-repo
+          ( cd sdks-repo && git sparse-checkout set iPhoneOS16.5.sdk )
+          DST="theos/sdks/iPhoneOS16.5.sdk/System/Library/PrivateFrameworks"
+          mkdir -p "$DST"
+          cp -R sdks-repo/iPhoneOS16.5.sdk/System/Library/PrivateFrameworks/. "$DST"/ 2>/dev/null || true
+          echo "Preferences موجود؟"; ls "$DST" | grep -i Preferences || echo "لا!"
+          rm -rf sdks-repo
+          ls theos/sdks
 
       - name: استنساخ مصدر uYouPlus كامل
         run: |
